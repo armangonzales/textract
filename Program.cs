@@ -1,68 +1,44 @@
 ﻿using System;
 using System.Text;
-using Amazon;
-using Amazon.Textract;
-using Amazon.Textract.Model;
+using iText.Kernel.Pdf;
+using iText.Kernel.Pdf.Canvas.Parser;
+using iText.Kernel.Pdf.Canvas.Parser.Listener;
 
-namespace PdfTextractExtractor
+namespace PdfTextTableExtractor
 {
     class Program
     {
-        static async System.Threading.Tasks.Task Main(string[] args)
+        static void Main(string[] args)
         {
-            // Specify the S3 bucket name and URL of the PDF document
-            string bucketName = "textract-console-ap-southeast-1-a5010ed1-938c-43df-b21f-ed271d9";
-            string documentUrl = "https://textract-console-ap-southeast-1-a5010ed1-938c-43df-b21f-ed271d9.s3.ap-southeast-1.amazonaws.com/91fe2f30_95c3_436f_bd4b_55f2a28f5228_sample.pdf";
+            // Specify the path to the PDF file
+            string pdfFilePath = @"C:\Users\Public\sample.pdf";
 
-            var region = RegionEndpoint.APSoutheast1;
+            // Create a StringBuilder to hold the extracted text
+            StringBuilder extractedText = new StringBuilder();
 
             try
             {
-                StringBuilder extractedText = new StringBuilder();
-
-                // Initialize the Textract client with the default credential chain
-                var textractClient = new AmazonTextractClient(region);
-
-                // Specify the request to analyze the document
-                var request = new AnalyzeDocumentRequest
+                // Open the PDF file
+                using (PdfReader pdfReader = new PdfReader(pdfFilePath))
                 {
-                    Document = new Document
+                    using (PdfDocument pdfDocument = new PdfDocument(pdfReader))
                     {
-                        S3Object = new S3Object
+                        // Iterate through each page
+                        for (int pageNumber = 1; pageNumber <= pdfDocument.GetNumberOfPages(); pageNumber++)
                         {
-                            Bucket = bucketName,
-                            Name = documentUrl
+                            // Extract text from the page
+                            ITextExtractionStrategy strategy = new SimpleTextExtractionStrategy();
+                            string pageText = PdfTextExtractor.GetTextFromPage(pdfDocument.GetPage(pageNumber), strategy);
+
+                            // Append the extracted text to the StringBuilder
+                            extractedText.AppendLine(pageText);
                         }
-                    },
-                    FeatureTypes = new List<string> { "TABLES", "FORMS" }
-                };
-
-                // Call Amazon Textract to analyze the document
-                var response = await textractClient.AnalyzeDocumentAsync(request);
-
-                // Extracted tables
-                List<Block> tables = response.Blocks.FindAll(b => b.BlockType == "TABLE");
-
-                // Extracted form fields
-                List<Block> forms = response.Blocks.FindAll(b => b.BlockType == "KEY_VALUE_SET");
-
-                // Display or process the extracted tables and forms
-                Console.WriteLine("Extracted Tables:");
-                foreach (var table in tables)
-                {
-                    Console.WriteLine(table.BlockType + ": " + table.Text);
+                    }
                 }
 
-                Console.WriteLine("\nExtracted Forms:");
-                foreach (var form in forms)
-                {
-                    Console.WriteLine(form.BlockType + ": " + form.Text);
-                }
-            }
-            catch (AmazonTextractException e)
-            {
-                Console.WriteLine("Error analyzing document:");
-                Console.WriteLine(e.Message);
+                // Display the extracted text
+                Console.WriteLine("Extracted Text:");
+                Console.WriteLine(extractedText);
             }
             catch (Exception ex)
             {

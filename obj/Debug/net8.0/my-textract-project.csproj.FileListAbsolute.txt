@@ -37,3 +37,4 @@ C:\Users\Public\my-textract-project\bin\Debug\net8.0\Microsoft.Extensions.Loggin
 C:\Users\Public\my-textract-project\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
 C:\Users\Public\my-textract-project\bin\Debug\net8.0\Microsoft.Extensions.Primitives.dll
 C:\Users\Public\my-textract-project\bin\Debug\net8.0\Newtonsoft.Json.dll
+C:\Users\Public\my-textract-project\obj\Debug\net8.0\my-textract-project.sourcelink.json
