@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("my-textract-project")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+261b5f2917221ce7f66b2d6deea545022da72f35")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ce93fa6a8b74f9922311d836a255418da0396efd")]
 [assembly: System.Reflection.AssemblyProductAttribute("my-textract-project")]
 [assembly: System.Reflection.AssemblyTitleAttribute("my-textract-project")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
